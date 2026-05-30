@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Screener</title>
+    <link rel="stylesheet" href="./resume scanner.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>AI Resume Screener 🔍</h1>
+
+    <form id="form">
+        <textarea name="resume" placeholder="Paste Resume here"></textarea>
+        <textarea name="job" placeholder="Paste Job Description here"></textarea>
+
+        <button type="submit">Analyze</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+document.getElementById("form").onsubmit = async function(e){
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    let res = await fetch("/analyze", {
+        method: "POST",
+        body: formData
+    });
+
+    let data = await res.json();
+
+    document.getElementById("result").innerHTML = `
+        <h3>Match Score: ${data.match}%</h3>
+        <p><b>Resume Skills:</b> ${data.resume_skills}</p>
+        <p><b>Job Skills:</b> ${data.job_skills}</p>
+    `;
+};
+</script>
+
+</body>
+</html>
